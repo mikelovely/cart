@@ -1,0 +1,7 @@
+<div class="thumbnail">
+	<a href="{{ path_for('product.get', {slug: product.slug}) }}"><img src="{{ product.image }}" alt="{{ product.title }}"></a>
+	<div class="caption">
+		<h4><a href="#">{{ product.title }}</a></h4>
+		<p>{{ product.description }}</p>
+	</div>
+</div>

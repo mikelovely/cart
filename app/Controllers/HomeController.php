@@ -13,9 +13,8 @@ class HomeController
 	{
 		$products = Product::get();
 
-		var_dump($products);
-		exit;
-
-		return $view->render($response, 'home.twig');
+		return $view->render($response, 'home.twig', [
+			'products' => $products,
+		]);
 	}
 }
