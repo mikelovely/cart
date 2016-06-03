@@ -25,7 +25,7 @@ class Product extends Model
 		return $this->stock >= 1;
 	}
 
-	public function hasStock()
+	public function hasStock($quantity)
 	{
 		return $this->stock >= $quantity;
 	}
