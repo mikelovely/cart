@@ -18,7 +18,17 @@
 							<tr>
 								<td><a href="{{ path_for('product.get', { slug: item.slug }) }}"></a>{{ item.title }}</td>
 								<td>£{{ item.price | number_format(2) }}</td>
-								<td></td>
+								<td>
+									<form action="{{ path_for('cart.update', { slug: item.slug }) }}" method="post" class="form-inline">
+										<select name="quantity" class="form-control input-sm">
+											{% for num in 1..item.stock %}
+												<option value="{{ num }}"{% if num == item.quantity %} selected="selected"{% endif %}>{{ num }}</option>
+											{% endfor %}
+											<option value="0">None</option>
+										</select>
+										<input type="submit" value="Update" class="btn btn-default btn-xs">
+									</form>
+								</td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -36,7 +46,7 @@
 
 					{% include 'cart/partials/summary.twig' %}
 
-					<a href="#" class="btn btn-default">Checkout</a>
+					<a href="{{ path_for('order.index') }}" class="btn btn-default">Checkout</a>
 				</div>
 			{% endif %}
 		</div>
