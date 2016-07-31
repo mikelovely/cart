@@ -10,7 +10,7 @@
 				<div class="col-md-6">
 					<h4>Shipping to</h4>
 					{{ order.address.address1 }}<br>
-					{{ order.address.address2 }}<br>
+					{% if order.address.address2 != "" %} {{ order.address.address2 }}<br> {% endif %}
 					{{ order.address.city }}<br>
 					{{ order.address.postal_code }}<br>
 				</div>
