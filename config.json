@@ -1,0 +1,18 @@
+{
+  "braintree": {
+    "environment": "_environment_",
+    "merchant_id": "_merchant_id_",
+    "public_key": "_public_key_",
+    "private_key": "_private_key_"
+  },
+  "database": {
+    "mysql": {
+      "driver": "mysql",
+      "username": "root",
+      "password": "password",
+      "host": "cart-db",
+      "port": 3306,
+      "database": "cart"
+    }
+  }
+}

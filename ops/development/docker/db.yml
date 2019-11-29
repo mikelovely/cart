@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  cart-db:
+    container_name: cart-db
+    build:
+      context: .
+      dockerfile: ./db/Dockerfile
+    environment:
+      - "MYSQL_ROOT_PASSWORD=password"
+      - "MYSQL_ROOT_HOST=%"
+    ports:
+      - "33068:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  default:
+    external:
+      name: environment_cart

@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  cart-composer:
+    container_name: cart-composer
+    image: composer
+    command: install --ignore-platform-reqs
+    volumes:
+      - ../../../:/app
+
+networks:
+  default:
+    external:
+      name: environment_cart

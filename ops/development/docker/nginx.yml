@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  cart-nginx:
+    container_name: cart-nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - "8088:80"
+    volumes:
+      - ../../../:/opt/cart/app
+    environment:
+      - "APPLICATION_ENVIRONMENT=development"
+      - "ENVIRONMENT_ROLE=dev"
+      - "SERVICE_NAME=service-name"
+    external_links:
+      - cart-fpm
+
+networks:
+  default:
+    external:
+      name: environment_cart

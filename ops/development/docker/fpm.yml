@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  cart-fpm:
+    container_name: cart-fpm
+    build:
+      context: .
+      dockerfile: ./fpm/Dockerfile
+    volumes:
+      - ../../../:/opt/cart/app
+      - ~/.aws:/home/www-data/.aws
+    environment:
+      - DIVIDO_APPLICATION_ENVIRONMENT=development
+      - DIVIDO_ENVIRONMENT_ROLE=dev
+
+networks:
+  default:
+    external:
+      name: environment_cart
