@@ -23,6 +23,17 @@ use Slim\Views\TwigExtension;
 
 class App extends DIBridge
 {
+    public static function make()
+    {
+        $app = new self();
+
+        $app->database($app->getContainer());
+        $app->braintree($app->getContainer());
+        $app->routes($app);
+
+        return $app;
+    }
+
 	protected function configureContainer(ContainerBuilder $builder)
 	{
 		$builder->addDefinitions([
@@ -125,7 +136,7 @@ class App extends DIBridge
         ]);
     }
 
-    public static function database($container)
+    private function database($container)
     {
         $capsule = new Capsule();
         $capsule->addConnection([
@@ -144,11 +155,30 @@ class App extends DIBridge
         $capsule->bootEloquent();
     }
 
-    public static function braintree($container)
+    private function braintree($container)
     {
         \Braintree\Configuration::environment($container->get('Config')->get('braintree.environment'));
         \Braintree\Configuration::merchantId($container->get('Config')->get('braintree.merchant_id'));
         \Braintree\Configuration::publicKey($container->get('Config')->get('braintree.public_key'));
         \Braintree\Configuration::privateKey($container->get('Config')->get('braintree.private_key'));
+    }
+
+    private function routes($app)
+    {
+        $app->group('', function () use ($app) {
+            $app->get('/', ['Cart\Controllers\HomeController', 'index'])->setName('home');
+            $app->get('/products/{slug}', ['Cart\Controllers\ProductController', 'get'])->setName('product.get');
+            $app->get('/cart', ['Cart\Controllers\CartController', 'index'])->setName('cart.index');
+            $app->get('/cart/add/{slug}/{quantity}', ['Cart\Controllers\CartController', 'add'])->setName('cart.add');
+            $app->post('/cart/update/{slug}', ['Cart\Controllers\CartController', 'update'])->setName('cart.update');
+            $app->get('/order', ['Cart\Controllers\OrderController', 'index'])->setName('order.index');
+            $app->get('/order/{hash}', ['Cart\Controllers\OrderController', 'show'])->setName('order.show');
+            $app->post('/order', ['Cart\Controllers\OrderController', 'create'])->setName('order.create');
+            $app->get('/braintree/token', ['Cart\Controllers\BraintreeController', 'token'])->setName('braintree.token');
+        })->add(
+            new \Cart\Middleware\ValidationErrorsMiddleware($app->getContainer()->get(Twig::class))
+        )->add(
+            new \Cart\Middleware\OldInputMiddleware($app->getContainer()->get(Twig::class))
+        );
     }
 }
